@@ -4,17 +4,10 @@
 
 int main()
 {
-	Init_Debug(EXTRA);
+	Init_Debug(Line | Details);
 
-	int val[5]={1,2,3,4,5};
-	DEBUG_CONTAINS(val, 22);
-	
-	DEBUG_CONTAINS("1234", "567");
+	int val[5]={1,2,3,1,0};
+	int msg[2]={1,0};
 
-	DEBUG_EQ(1, 2);
-	DEBUG_ASSERT(1 == 2);
-
-	DEBUG_EQ("123", "456");
-
-	DEBUG_ARRAY_ENDS_CRLF("123");
+	DEBUG_ENDS(val, msg);
 }

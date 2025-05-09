@@ -1,10 +1,7 @@
 #ifndef MACROS
 #define MACROS
-
-
 #define DEBUG(TEXT) debug(TEXT)
 #define DEBUG_ASSERT(TEXT) debug_assert(TEXT, __LINE__)
-
 
 // Generic EQ macro
 #define DEBUG_EQ(A, V) \
@@ -27,10 +24,18 @@ _Generic((A), \
 	const int *: debug_int_array_contains \
 )( (A), ARRAY_SIZE(A), (V), __LINE__)
 
-
 // Non Generic CONTAINS macro
 #define DEBUG_CHAR_ARRAY_CONTAINS(TEXT1, TEXT2) debug_array_contains(TEXT1, TEXT2, __LINE__)
 #define DEBUG_INT_ARRAY_CONTAINS(TEXT1, TEXT2) debug_int_array_contains(TEXT1, TEXT2, __LINE__)
+
+#define DEBUG_ENDS(A, V) \
+_Generic((A), \
+	char *: debug_char_array_ends, \
+	const char *: debug_char_array_ends, \
+	int *: debug_int_array_ends, \
+	const int *: debug_int_array_ends \
+)( (A), ARRAY_SIZE(A), (V), ARRAY_SIZE(V), __LINE__)
+
 
 // Other
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof((arr)[0]))
