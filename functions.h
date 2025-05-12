@@ -35,6 +35,7 @@ enum TypeError {
 	ENDS,
 	ENDS_CRLF,
 	CONTAIN,
+    ALL,
 };
 
 static inline void format(enum TypeError err_type,
@@ -65,12 +66,15 @@ static inline void format(enum TypeError err_type,
     case ENDS:
         snprintf(output, sizeof(output), "ENDS ASSERTION FAILED");
         break;
+    case ALL:
+        snprintf(output, sizeof(output), "ALL ASSERTION FAILED");
+        break;
     default:
         snprintf(output, sizeof(output), "UNKNOWN ERROR");
     }
     }
     if(debug_config & Line) {
-        snprintf(output + strlen(output), sizeof(output) - strlen(output), " in line: %d", line);
+        snprintf(output + strlen(output), sizeof(output) - strlen(output), " in line %d", line);
     }
 
     
@@ -81,13 +85,13 @@ static inline void format(enum TypeError err_type,
 	debug(output);
 	stop_execution();
 }
-static inline void debug_assert(unsigned int expr, int line) {
+static inline void f_assert(unsigned int expr, int line) {
     if (!expr) {
         format(ASSERT, line, "");
     }
 }
 
-static inline void debug_eq_int(int a, int b, int line) {
+static inline void f_eq_int(int a, int b, int line) {
     if (a != b) {
         char details[64];
         snprintf(details, sizeof(details), "%d != %d", a, b);
@@ -95,7 +99,7 @@ static inline void debug_eq_int(int a, int b, int line) {
     }
 }
 
-static inline void debug_eq_str(const char a[], const char b[], int line) {
+static inline void f_eq_char_array(const char a[], const char b[], int line) {
     if (strcmp(a, b) != 0) {
         char details[128];
         snprintf(details, sizeof(details), "\"%s\" != \"%s\"", a, b);
@@ -103,7 +107,7 @@ static inline void debug_eq_str(const char a[], const char b[], int line) {
     }
 }
 
-static inline void debug_array_ends_crlf(const char a[],
+static inline void f_char_array_ends_crlf(const char a[],
                                          int len,
                                          int line)
 {
@@ -115,7 +119,7 @@ static inline void debug_array_ends_crlf(const char a[],
     }
 }
 
-static inline void debug_char_array_ends(const char a[],
+static inline void f_char_array_ends(const char a[],
                                     int alen,
                                     const char b[],
                                     int blen,
@@ -137,7 +141,7 @@ static inline void debug_char_array_ends(const char a[],
     } 
 }
 
-static inline void debug_int_array_ends(const int a[],
+static inline void f_int_array_ends(const int a[],
                                     int alen,
                                     const int b[],
                                     int blen,
@@ -159,7 +163,7 @@ static inline void debug_int_array_ends(const int a[],
     } 
 }
 
-static inline void debug_char_array_contains(const char a[],
+static inline void f_char_array_contains(const char a[],
                                             int len,
                                         	const char b[],
                                         	int line)
@@ -172,7 +176,7 @@ static inline void debug_char_array_contains(const char a[],
     }
 }
 
-static inline void debug_int_array_contains(const int a[],
+static inline void f_int_array_contains(const int a[],
                                             int len,
 											const int b,
 											int line)
@@ -184,6 +188,54 @@ static inline void debug_int_array_contains(const int a[],
     snprintf(details, sizeof(details),
         	 "\"%d\" not found in array", b, a);
     format(CONTAIN, line, details);
+}
+
+static inline void f_int_array_all(const int a[],
+                                   int len,
+                                   int item,
+                                   int line)
+{
+    for(int i = 0; i < len; i++) {
+        if(a[i] != item) {
+            char details[128];
+            snprintf(details, sizeof(details),
+        	    "in array item %d == %d", i, a[i]);
+            format(ALL, line, details);
+            return;
+        }
+    }
+}
+
+static inline void f_double_array_all(const double a[],
+                                   int len,
+                                   double item,
+                                   int line)
+{
+    for(int i = 0; i < len; i++) {
+        if(a[i] != item) {
+            char details[128];
+            snprintf(details, sizeof(details),
+        	    "in array item %d == %f", i, a[i]);
+            format(ALL, line, details);
+            return;
+        }
+    }
+}
+
+static inline void f_char_array_all(const char a[],
+                                   int len,
+                                   int item,
+                                   int line)
+{
+    for(int i = 0; i < len; i++) {
+        if(a[i] != item) {
+            char details[128];
+            snprintf(details, sizeof(details),
+        	    "in array item %d == \"%c\"", i, a[i]);
+            format(ALL, line, details);
+            return;
+        }
+    }
 }
 
 #endif

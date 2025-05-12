@@ -1,13 +1,10 @@
 #include "functions.h"
 #include "macros.h"
 
-
 int main()
 {
-	Init_Debug(Line | Details);
+	Init_Debug(Type | Line | Details);
 
-	int val[5]={1,2,3,1,0};
-	int msg[2]={1,0};
-
-	DEBUG_ENDS(val, msg);
+	double data[2] = {1.0, 2.4};
+	DEBUG_ALL(data, 1.0);
 }
