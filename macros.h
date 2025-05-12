@@ -1,7 +1,7 @@
 #ifndef MACROS
 #define MACROS
 #define DEBUG(TEXT) debug(TEXT)
-#define DEBUG_ASSERT(TEXT) debug_assert(TEXT, __LINE__)
+#define DEBUG_ASSERT(TEXT) f_assert(TEXT, __LINE__)
 
 // Generic EQ macro
 #define DEBUG_EQ(A, V) \
@@ -43,6 +43,6 @@ _Generic((A), \
 
 // Other
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof((arr)[0]))
-#define DEBUG_ARRAY_ENDS_CRLF(TEXT) f_char_array_ends_crlf(TEXT, ARRAY_SIZE(TEXT), __LINE__)
+#define DEBUG_ENDS_CRLF(TEXT) f_char_array_ends_crlf(TEXT, ARRAY_SIZE(TEXT), __LINE__)
 
 #endif
